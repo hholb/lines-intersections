@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="Main.js" type="module" defer></script>
+    <link rel="stylesheet" href="styles.css"/>
+    <title>Lines and Intersections</title>
+</head>
+<body>
+<main id="app" class="flex flex-col min-h-screen">
+    <div id="info">
+        <h1>Lines and Intersections</h1>
+        <ol>
+            <li>1. Click inside the canvas to add a point.</li>
+            <li>2. Click inside the canvas again to add a second point. A line will connect the points.</li>
+            <li>3. Repeat steps one and two to add another line.</li>
+            <li>4. Click the 'Find Intersections' and the intersection point will be calculated and a circle will
+                highlight
+                the intersections.
+            </li>
+        </ol>
+    </div>
+    <div id="canvas-container" class="flex flex-col self-center m-5">
+        <h2 class="self-center m-2">Canvas</h2>
+        <canvas id="main-canvas" class="border-2 rounded" width="500" height="500">
+            Please use a browser that supports HTML Canvas elements.
+        </canvas>
+        <div id="canvas-buttons" class="flex justify-between">
+            <button id="find-intersection-button"
+                    class="shadow-md border-1 rounded m-1 p-1 bg-clip-padding hover:bg-slate-300">
+                Find
+                Intersections
+            </button>
+            <button id="clear-canvas-button"
+                    class="shadow-md border-1 rounded m-1 p-1 bg-clip-padding hover:bg-slate-300">
+                Clear
+            </button>
+        </div>
+    </div>
+    <div id="description-container">
+        <h1>Description</h1>
+        <h2>Overview</h2>
+        <p>The purpose of this project is to get some practice with the math for computing lines and intersections using
+            linear algebra.</p>
+        <h2>How It Works</h2>
+        <p>TBD</p>
+    </div>
+</main>
+</body>
+</html>
