@@ -9,22 +9,23 @@
     <title>Lines and Intersections</title>
 </head>
 <body>
-<main id="app" class="flex flex-col min-h-screen">
-    <div id="info">
+<main id="app" class="flex flex-col lg:flex-row min-h-screen">
+    <div id="info" class="">
         <h1>Lines and Intersections</h1>
         <ol>
             <li>1. Click inside the canvas to add a point.</li>
-            <li>2. Click inside the canvas again to add a second point. A line will connect the points.</li>
-            <li>3. Repeat steps one and two to add another line.</li>
-            <li>4. Click the 'Find Intersections' and the intersection point will be calculated and a circle will
+            <li>2. Click inside the canvas again to add a second point. A line segment will connect the points.</li>
+            <li>3. Repeat steps one and two to add more line segments. You can add as many line segments as you like.
+            </li>
+            <li>4. Click the 'Find Intersections' and all intersection points will be calculated and a circle will
                 highlight
                 the intersections.
             </li>
         </ol>
     </div>
-    <div id="canvas-container" class="flex flex-col self-center m-5">
+    <div id="canvas-container" class="flex flex-grow shrink flex-col self-center m-5 max-w-3/4 lg:max-w-1/2">
         <h2 class="self-center m-2">Canvas</h2>
-        <canvas id="main-canvas" class="border-2 rounded" width="500" height="500">
+        <canvas id="main-canvas" class="border-2 rounded shadow-md" width="500" height="500">
             Please use a browser that supports HTML Canvas elements.
         </canvas>
         <div id="canvas-buttons" class="flex justify-between">
@@ -39,13 +40,35 @@
             </button>
         </div>
     </div>
-    <div id="description-container">
+    <div id="description-container" class="">
         <h1>Description</h1>
         <h2>Overview</h2>
         <p>The purpose of this project is to get some practice with the math for computing lines and intersections using
             linear algebra.</p>
+        <p>It is built using HTML Canvas, Tailwind CSS, and JavaScript</p>
         <h2>How It Works</h2>
-        <p>TBD</p>
+        <p>2 points form a line segment on the canvas.</p>
+        <p>Each line segment is represented by its end points.</p>
+        <p>When the 'Find Intersections' button is clicked, each line segment is converted to its parametric form.</p>
+        <pre><code>
+            L1(t) = x1 + t(x2 - x1), L1(t) = y1 + t(y2 - y1)
+        </code></pre>
+        <p>Then, for each line segment on the canvas we set up a system of equations setting each line segment's
+            parametric
+            equations
+            equal to another line segment's equations.</p>
+        <pre><code>
+            x1 + t1(x2 - x1) = x3 + t2(x4 - x3)
+            y1 + t1(y2 - y1) = y3 + t2(y4 - y3)
+        </code></pre>
+        <p>This allows us to solve for t1 and t2 in terms of just the end points of each line segment, as well as find
+            where they intersect.</p>
+        <p>Once we have t1 and t2, we can plug them back into the parametric equations and get a value for t1 and
+            t2.</p>
+        <p>We then need to check that t1 and t2 are between 0 and 1. If they are not the intersection lies outside the
+            line segment.</p>
+        <p>With values for t1 and t2 in hand, we can plug them into the equations and find the x and y coordinates of
+            the intersection point.</p>
     </div>
 </main>
 </body>
