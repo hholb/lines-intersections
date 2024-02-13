@@ -9,8 +9,8 @@
     <title>Lines and Intersections</title>
 </head>
 <body>
-<main id="app" class="flex flex-col lg:flex-row min-h-screen">
-    <div id="info" class="">
+<main id="app" class="flex flex-col lg:flex-row lg:max-h-screen min-h-screen">
+    <div id="info" class="lg:self-center">
         <h1>Lines and Intersections</h1>
         <ol>
             <li>1. Click inside the canvas to add a point.</li>
@@ -25,7 +25,7 @@
     </div>
     <div id="canvas-container" class="flex flex-grow shrink flex-col self-center m-5 max-w-3/4 lg:max-w-1/2">
         <h2 class="self-center m-2">Canvas</h2>
-        <canvas id="main-canvas" class="border-2 rounded shadow-md" width="500" height="500">
+        <canvas id="main-canvas" class="border-2 rounded shadow-md w-full h-full">
             Please use a browser that supports HTML Canvas elements.
         </canvas>
         <div id="canvas-buttons" class="flex justify-between">
@@ -40,7 +40,7 @@
             </button>
         </div>
     </div>
-    <div id="description-container" class="">
+    <div id="description-container" class="lg:overflow-scroll">
         <h1>Description</h1>
         <h2>Overview</h2>
         <p>The purpose of this project is to get some practice with the math for computing lines and intersections using
@@ -57,18 +57,116 @@
             parametric
             equations
             equal to another line segment's equations.</p>
+        <p>This allows us to solve for t1 and t2 in terms of just the end points of each line segment, as well as find
+            where they intersect.</p>
         <pre><code>
             x1 + t1(x2 - x1) = x3 + t2(x4 - x3)
             y1 + t1(y2 - y1) = y3 + t2(y4 - y3)
         </code></pre>
-        <p>This allows us to solve for t1 and t2 in terms of just the end points of each line segment, as well as find
-            where they intersect.</p>
-        <p>Once we have t1 and t2, we can plug them back into the parametric equations and get a value for t1 and
-            t2.</p>
-        <p>We then need to check that t1 and t2 are between 0 and 1. If they are not the intersection lies outside the
+        <p>Once we have t1 and t2 in terms of the endpoints, we can get a value for t1 and t2.</p>
+        <p>We then check that t1 and t2 are between 0 and 1. If they are not the intersection lies outside the
             line segment.</p>
         <p>With values for t1 and t2 in hand, we can plug them into the equations and find the x and y coordinates of
             the intersection point.</p>
+        <h2>The Code</h2>
+        <p>I created a few classes to help me out with this project:</p>
+        <ul>
+            <li>class Point2D</li>
+            <li>class LineSegment2D</li>
+            <li>class Vector2D</li>
+        </ul>
+        <p>Each class holds the data to represent itself in 2D, along with functionality to perform calculations.</p>
+        <p>Essentially, a Point2D is holds an x and y coordinate, a LineSegment2D holds two Point2Ds, and a Vector2D has
+            an x and y component.</p>
+        <p>When the user clicks on the canvas a new Point2D is created and drawn on the canvas.</p>
+        <p>When a second Point2D is created, a new LineSegment2D is created to connect the two points. This new line
+            segment is then drawn on the canvas.</p>
+        <p>This can be repeated for as many pairs of points as the user wants.</p>
+        <p>When the 'Find Intersections' button is clicked, this code is run to find and draw circles around any
+            intersection points:</p>
+        <pre><code>
+    for (const line1 of lines) {
+        for (const other of lines) {
+            if (line1 === other) {
+                break;
+            }
+            const intersection = line1.getIntersectionPoint(other);
+            if (intersection === undefined) {
+                const text = "No Intersections Found.";
+                await drawNoIntersectionsMessage();
+            } else {
+                const path = new Path2D();
+                const circleRadius = Math.max(canvas.clientWidth / 130, 8);
+                path.arc(intersection.x, intersection.y, circleRadius, 0, 2 * Math.PI);
+                ctx.strokeStyle = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}`;
+                ctx.stroke(path);
+            }
+        }
+    }
+        </code></pre>
+        <p>The interesting bit is the call to <code>line1.getIntersectionPoint(other).</code></p>
+        <p><code>getIntersectionPoint()</code> is a method of the LineSegment2D class and looks like this:</p>
+        <pre><code>
+   getIntersectionPoint(other) {
+        const x1 = this.point1.x;
+        const x2 = this.point2.x;
+        const y1 = this.point1.y;
+        const y2 = this.point2.y;
+
+        const x3 = other.point1.x;
+        const x4 = other.point2.x;
+        const y3 = other.point1.y;
+        const y4 = other.point2.y;
+
+        const v1 = Vector2D.normalize(Point2D.subtract(this.point1, this.point2));
+        const v2 = Vector2D.normalize(Point2D.subtract(other.point1, other.point2));
+
+        const v1CrossV2 = Vector2D.cross(v1, v2);
+        if (v1CrossV2 === 0) {
+            console.log("Vectors are collinear, no intersections possible.");
+            return;
+        }
+
+        // Solve:
+        // x1 + t1(x2 - x1) = x3 + t2(x4 - x3) and
+        // y1 + t1(y2 - y1) = y3 + t2(y4 - y3)
+        // to find t1 and t2 in terms of the points.
+        const t2Numerator = ((y1 - y3) * (x2 - x1) + (x3 - x1) * (y2 - y1)) / ((x2 - x1) * (y4 - y3));
+        const t2Denominator = 1 - ((x4 - x3) * (y2 - y1)) / ((x2 - x1) * (y4 - y3));
+        const t2 = t2Numerator / t2Denominator;
+        const t1 = ((x3 - x1) + t2 * (x4 - x3)) / (x2 - x1);
+
+        console.log(`t1: ${t1}, t2: ${t2}`);
+
+        // Check if t1 or t2 are outside the line segments.
+        if (t1 < 0 || t1 > 1) {
+            console.log("Intersection is outside of line segment.");
+            return;
+        }
+        if (t2 < 0 || t2 > 1) {
+            console.log("Intersection is outside of line segment.");
+            return;
+        }
+
+        // We have an intersections! plug t1 back into the parametric equations.
+        const xIntersect = x1 + t1 * (x2 - x1);
+        const yIntersect = y1 + t1 * (y2 - y1);
+        console.log(`Found intersect at Point(${xIntersect}, ${yIntersect}`);
+        return new Point2D(xIntersect, yIntersect);
+    }
+
+        </code></pre>
+        <p>First we grab all the points we need for the calculations. Then we create normalized Vector2Ds from the
+            endpoints of each line segment and calculate the cross product.</p>
+        <p>The cross product allows us to easily check if the lines are collinear.</p>
+        <p>Then, using the expressions for t1 and t2 determined from the parametric functions of each line, we can
+            determine if the lines intersect and if the intersection point is actually on the line segments in
+            question.</p>
+
+        <p>The rest of the code is fairly boilerplate stuff for drawing on the canvas.</p>
+        <br>
+        <p>Created by Hayden Holbrook</p>
+        <p><a href="mailto:hholbroo@unca.edu">Email</a> me with any questions.</p>
     </div>
 </main>
 </body>

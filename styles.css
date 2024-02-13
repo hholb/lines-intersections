@@ -34,3 +34,11 @@ main {
 #description-container p {
     margin: 0.5rem 0.5rem 0.5rem 1rem;
 }
+
+#description-container ul {
+    margin-left: 1.5rem;
+}
+
+#description-container p a {
+    color: blue;
+}
