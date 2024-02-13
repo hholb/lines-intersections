@@ -87,7 +87,7 @@ async function drawNoIntersectionsMessage() {
     ctx.fillText(text, x, y);
 
     // Wait a couple seconds and clear the canvas.
-    await new Promise(resolve => setTimeout(() => {
+    await new Promise(() => setTimeout(() => {
         clearCanvas();
     }, 2000));
 }
