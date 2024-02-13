@@ -72,6 +72,6 @@ export class Vector2D {
     static cross(vec1, vec2) {
         const vec1Norm = Vector2D.normalize(vec1);
         const vec2Norm = Vector2D.normalize(vec2);
-        return vec1.x * vec2.y - vec1.y * vec2.x;
+        return vec1Norm.x * vec2Norm.y - vec1Norm.y * vec2Norm.x;
     }
 }
