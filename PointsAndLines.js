@@ -1,27 +1,57 @@
 import {Vector2D} from "./Vector.js";
 
-export class Point {
+/**
+ * Represents a point in 2D space.
+ */
+export class Point2D {
+    /**
+     * Create a new Point2D with the given coordinates.
+     * @param x {Number}
+     * @param y {Number}
+     */
     constructor(x, y) {
         this.x = x;
         this.y = y;
     }
 
-    // Return a new Vector2D(x, y) resulting from the subtraction of p1 from p2.
+    /**
+     Return a new Vector2D resulting from the subtraction of p1 from p2.
+     @param p1 {Point2D}
+     @param p2 {Point2D}
+     */
     static subtract(p1, p2) {
         return new Vector2D(p2.x - p1.x, p2.y - p1.y);
     }
 }
 
-export class LineSegment {
+/**
+ * Represents a line segment in 2D space.
+ */
+export class LineSegment2D {
+    /**
+     * Create a new LineSegment2D with the given endpoints.
+     * @param point1 {Point2D}
+     * @param point2 {Point2D}
+     */
     constructor(point1, point2) {
         this.point1 = point1;
         this.point2 = point2;
     }
 
+    /**
+     * Return if the given line segment intersects with this line segment.
+     * @param other {LineSegment2D}
+     * @returns {boolean}
+     */
     intersectsWith(other) {
         return this.getIntersectionPoint(other) !== undefined;
     }
 
+    /**
+     * Return the intersection point of this line with the given line segment as a Point2D.
+     * @param other {LineSegment2D}
+     * @return {Point2D | undefined}
+     */
     getIntersectionPoint(other) {
         const x1 = this.point1.x;
         const x2 = this.point2.x;
@@ -33,8 +63,8 @@ export class LineSegment {
         const y3 = other.point1.y;
         const y4 = other.point2.y;
 
-        const v1 = Vector2D.normalize(Point.subtract(this.point1, this.point2));
-        const v2 = Vector2D.normalize(Point.subtract(other.point1, other.point2));
+        const v1 = Vector2D.normalize(Point2D.subtract(this.point1, this.point2));
+        const v2 = Vector2D.normalize(Point2D.subtract(other.point1, other.point2));
 
         const v1CrossV2 = Vector2D.cross(v1, v2);
         if (v1CrossV2 === 0) {
@@ -67,6 +97,6 @@ export class LineSegment {
         const xIntersect = x1 + t1 * (x2 - x1);
         const yIntersect = y1 + t1 * (y2 - y1);
         console.log(`Found intersect at Point(${xIntersect}, ${yIntersect}`);
-        return new Point(xIntersect, yIntersect);
+        return new Point2D(xIntersect, yIntersect);
     }
 }
