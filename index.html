@@ -15,11 +15,12 @@
         <ol>
             <li>1. Click inside the canvas to add a point.</li>
             <li>2. Click inside the canvas again to add a second point. A line segment will connect the points.</li>
-            <li>3. Repeat steps one and two to add more line segments. You can add as many line segments as you like.
+            <li>3. Repeat steps 1 and 2 to add more line segments. You can add as many line segments as you like.
             </li>
-            <li>4. Click the 'Find Intersections' and all intersection points will be calculated and a circle will
+            <li>4. Click the 'Find Intersections' button and all intersection points will be calculated and a circle
+                will
                 highlight
-                the intersections.
+                each intersection.
             </li>
         </ol>
     </div>
@@ -44,7 +45,7 @@
         <h1>Description</h1>
         <h2>Overview</h2>
         <p>The purpose of this project is to get some practice with the math for computing lines and intersections using
-            linear algebra.</p>
+            linear algebra in the context of computer graphics.</p>
         <p>It is built using HTML Canvas, Tailwind CSS, and JavaScript</p>
         <h2>How It Works</h2>
         <p>2 points form a line segment on the canvas.</p>
@@ -75,8 +76,9 @@
             <li>class LineSegment2D</li>
             <li>class Vector2D</li>
         </ul>
-        <p>Each class holds the data to represent itself in 2D, along with functionality to perform calculations.</p>
-        <p>Essentially, a Point2D is holds an x and y coordinate, a LineSegment2D holds two Point2Ds, and a Vector2D has
+        <p>Each class holds the data to represent itself in 2D, along with functions to perform the necessary
+            calculations.</p>
+        <p>Essentially, a Point2D holds an x and y coordinate, a LineSegment2D holds two Point2Ds, and a Vector2D has
             an x and y component.</p>
         <p>When the user clicks on the canvas a new Point2D is created and drawn on the canvas.</p>
         <p>When a second Point2D is created, a new LineSegment2D is created to connect the two points. This new line
@@ -148,7 +150,7 @@
             return;
         }
 
-        // We have an intersections! plug t1 back into the parametric equations.
+        // We have an intersection! plug t1 back into the parametric equations.
         const xIntersect = x1 + t1 * (x2 - x1);
         const yIntersect = y1 + t1 * (y2 - y1);
         console.log(`Found intersect at Point(${xIntersect}, ${yIntersect}`);
@@ -158,12 +160,14 @@
         </code></pre>
         <p>First we grab all the points we need for the calculations. Then we create normalized Vector2Ds from the
             endpoints of each line segment and calculate the cross product.</p>
-        <p>The cross product allows us to easily check if the lines are collinear.</p>
+        <p>The cross product allows us to easily check if the lines are collinear. If they are, we don't need to look
+            for intersections.</p>
         <p>Then, using the expressions for t1 and t2 determined from the parametric functions of each line, we can
             determine if the lines intersect and if the intersection point is actually on the line segments in
             question.</p>
 
         <p>The rest of the code is fairly boilerplate stuff for drawing on the canvas.</p>
+        <p>Check it out here: <a href="https://github.com/hholb/lines-intersections">Lines and Intersections</a></p>
         <br>
         <p>Created by Hayden Holbrook</p>
         <p><a href="mailto:hholbroo@unca.edu">Email</a> me with any questions.</p>
